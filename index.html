@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallpaper Designer</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.png" type="image/png">
+</head>
+
+<body>
+  <div class="flex-row gap-1 p-1 grow justify-center">
+    <div class="flex align-center">
+      <div class="flex-col shrink gap-1" id="main-container">
+        <div class="flex" id="title-bar">
+          <div id="close"></div>
+          <hr id="hr1">
+          <hr id="hr2">
+          <hr id="hr3">
+          <hr id="hr4">
+          <hr id="hr5">
+          <hr id="hr6">
+          <h1>Wallpaper Designer</h1>
+        </div>
+        <div class="flex-row gap-1 px-1" id="controls">
+          <div class="flex align-center justify-center input-box">
+            <label for="width">Width:</label>
+            <input type="number" id="width" value="128" min="8" width="4">
+          </div>
+          <div class="flex align-center justify-center input-box">
+            <label for="height">Height:</label>
+            <input type="number" id="height" value="128" min="8" size="4">
+          </div>
+        </div>
+        <div class="flex-col gap-1 p-1">
+          <div class="flex-col gap-1" id="input-canvas-container">
+            <div class="flex align-center gap-1">
+              <div id="left-arrow"></div>
+              <table id="input-canvas"></table>
+              <div id="right-arrow"></div>
+            </div>
+            <button id="invert">Invert Design</button>
+          </div>
+        </div>
+
+        <div class="grid-3 w-100 justify-center p-1">
+          <div class="flex-col grow gap-1 p-1">
+            <h2>Design</h2>
+            <div class="flex gap-1" id="design-controls">
+              <button id="save">Save</button>
+              <button id="load">Load</button>
+              <button id="clear">Clear</button>
+            </div>
+            <hr>
+            <hr>
+          </div>
+          <hr class="vertical-hr">
+          <div class="flex-col grow gap-1 p-1">
+            <h2>Scale</h2>
+            <div class="flex-row w-100 gap-1 justify-between">
+              <p onclick="setRangeValue(1)">1</p>
+              <p onclick="setRangeValue(2)">2</p>
+              <p onclick="setRangeValue(3)">4</p>
+              <p onclick="setRangeValue(4)">8</p>
+              <p onclick="setRangeValue(5)">10</p>
+            </div>
+            <input type="range" name="download-scale" id="scale-selector" min="1" max="5" value="4" step="1" class="custom-range">
+            <button id="download">Download</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="output-canvas-container" style="display: none;">
+      <canvas id="output-canvas"></canvas>
+    </div>
+  </div>
+  
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
