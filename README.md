@@ -10,14 +10,15 @@ Simply draw your desired pattern in the grid and watch it update live on the bac
 
 To save the image, set your width and height and at the top, select the desired scale. Then click Download.
 
+If you want the pattern to appear big in the downloaded image you should set a low resolution and choose a big scale.
+
 You can also save your awesome patterns by clicking the save button. Then load them back in by clicking the load button.
 
 For a more personalized experience, you can change the colors of the pattern by clicking the color picker and selecting the desired color.
 
 ## Features
-
-- [x] Save and load patterns
-- [x] Download image
-- [x] Change scale
-- [x] Customize colors
+- Save and load patterns
+- Download image
+- Change scale
+- Customize colors
 
