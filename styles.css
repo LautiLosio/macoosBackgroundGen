@@ -32,7 +32,7 @@ body {
 #main-container {
   background-color: var(--white);
   border: 3px solid var(--black);
-  box-shadow: 3px 3px 0 var(--black), 1px 1px 0 6px var(--white);
+  box-shadow: 3px 3px 0 var(--black), 1px 1px 0 8px var(--white);
 }
 
 #title-bar {
