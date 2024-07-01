@@ -11,6 +11,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const body = document.querySelector("body");
   const rightArrow = document.getElementById("right-arrow");
   const leftArrow = document.getElementById("left-arrow");
+  const closeButtonEasterEgg = document.getElementById("close");
+  const whiteInput = document.getElementById("white-input");
+  const blackInput = document.getElementById("black-input");
+
+
+  // Easter egg for the close button
+  closeButtonEasterEgg.addEventListener("click", () => {
+    //toggle the display of the background image of the button
+    if (closeButtonEasterEgg.style.backgroundImage.includes("favicon.png")) {
+      closeButtonEasterEgg.style.backgroundImage = "unset";
+    } else {
+      closeButtonEasterEgg.style.backgroundImage = "url(./favicon.png)";
+    }
+    closeButtonEasterEgg.style.backgroundSize = "cover";
+    closeButtonEasterEgg.style.backgroundPosition = "center";
+    closeButtonEasterEgg.style.backgroundRepeat = "no-repeat";
+  });
 
   const wallpaperCanvas = document.createElement("canvas");
 
@@ -56,8 +73,23 @@ document.addEventListener("DOMContentLoaded", () => {
     "black.json",
   ];
 
+  let black = blackInput.value;
+  let white = whiteInput.value;
+
+  blackInput.addEventListener("input", () => {
+    black = blackInput.value;
+    document.documentElement.style.setProperty("--black", black);
+    scheduleUpdate();
+  });
+
+  whiteInput.addEventListener("input", () => {
+    white = whiteInput.value;
+    document.documentElement.style.setProperty("--white", white);
+    scheduleUpdate();
+  });
+
   let isMouseDown = false;
-  let drawColor = "black";
+  let drawColor = black;
   let needsUpdate = false;
 
   const generateWallpaper = () => {
@@ -66,11 +98,12 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let row of inputCanvas.rows) {
       const rowData = [];
       for (let cell of row.cells) {
-        rowData.push(cell.style.backgroundColor === "black" ? 1 : 0);
+        rowData.push(varToHex(cell.style.backgroundColor) === black ? 1 : 0);
       }
       pattern.push(rowData);
     }
 
+    // Get the width and height of the inputs
     const width = parseInt(widthInput.value);
     const height = parseInt(heightInput.value);
    
@@ -82,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (let y = 0; y < 8; y++) {
       for (let x = 0; x < 8; x++) {
-        patternCtx.fillStyle = pattern[y][x] ? "black" : "white";
+        patternCtx.fillStyle = pattern[y][x] ? black : white;
         patternCtx.fillRect(x, y, 1, 1);
       }
     }
@@ -101,7 +134,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Draw the background image on the website
-    body.style.backgroundImage = `url(${backgroundCanvas.toDataURL()})`;
+    // body.style.backgroundImage = `url(${backgroundCanvas.toDataURL()})`;
+
+    // save it as a css variable
+    document.documentElement.style.setProperty("--background-image", `url(${backgroundCanvas.toDataURL()})`);
 
     // Draw the wallpaper on the wallpaperCanvas
     wallpaperCanvas.width = width;
@@ -125,18 +161,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  const hexToVar = (hex) => {
+    return hex === black ? "var(--black)" : "var(--white)";
+  };
+
+  const varToHex = (varString) => {
+    return varString === "var(--black)" ? black : white;
+  };
+
   // Initialize 8x8 input canvas
   for (let row = 0; row < 8; row++) {
     const tr = document.createElement("tr");
     for (let col = 0; col < 8; col++) {
       const td = document.createElement("td");
-      td.style.backgroundColor = "white";
+      td.style.backgroundColor = hexToVar(white);
       if ((row % 2 === 0 && col % 2 === 0) || (row % 2 === 1 && col % 2 === 1)) {
-        td.style.backgroundColor = "black";
+        td.style.backgroundColor = hexToVar(black);
       }
       td.addEventListener("mousedown", (event) => {
-        const initialColor = event.target.style.backgroundColor;
-        drawColor = initialColor === "black" ? "white" : "black";
+        const initialColor = varToHex(event.target.style.backgroundColor);
+        drawColor = initialColor === black ? hexToVar(white) : hexToVar(black);
         td.style.backgroundColor = drawColor;
         isMouseDown = true;
         scheduleUpdate();
@@ -160,12 +204,13 @@ document.addEventListener("DOMContentLoaded", () => {
   invertButton.addEventListener("click", () => {
     for (let row of inputCanvas.rows) {
       for (let cell of row.cells) {
-        cell.style.backgroundColor =
-          cell.style.backgroundColor === "black" ? "white" : "black";
-      }
+        cell.style.backgroundColor = varToHex(cell.style.backgroundColor) === black ?
+          hexToVar(white) : hexToVar(black);
+      } 
     }
     scheduleUpdate();
   });
+
 
   //validate input values no less than 8 for width and height on blur
   widthInput.addEventListener("blur", () => {
@@ -224,11 +269,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Save the configuration of the 8x8 design as a JSON file
   saveButton.addEventListener("click", (event) => {
+    event.preventDefault();
     const pattern = [];
     for (let row of inputCanvas.rows) {
       const rowData = [];
       for (let cell of row.cells) {
-        rowData.push(cell.style.backgroundColor === "black" ? 1 : 0);
+        rowData.push(varToHex(cell.style.backgroundColor) === black ? 1 : 0);
       }
       pattern.push(rowData);
     }
@@ -259,10 +305,11 @@ document.addEventListener("DOMContentLoaded", () => {
         heightInput.value = json.height;
         for (let row = 0; row < 8; row++) {
           for (let col = 0; col < 8; col++) {
-            inputCanvas.rows[row].cells[col].style.backgroundColor = json
-              .pattern[row][col]
-              ? "black"
-              : "white";
+            if (json.pattern[row][col] === 1) {
+              inputCanvas.rows[row].cells[col].style.backgroundColor = hexToVar(black);
+            } else {
+              inputCanvas.rows[row].cells[col].style.backgroundColor = hexToVar(white);
+            }
           }
         }
         scheduleUpdate();
@@ -285,10 +332,11 @@ document.addEventListener("DOMContentLoaded", () => {
         heightInput.value = json.height;
         for (let row = 0; row < 8; row++) {
           for (let col = 0; col < 8; col++) {
-            inputCanvas.rows[row].cells[col].style.backgroundColor = json
-              .pattern[row][col]
-              ? "black"
-              : "white";
+            if (json.pattern[row][col] === 1) {
+              inputCanvas.rows[row].cells[col].style.backgroundColor = hexToVar(black);
+            } else {
+              inputCanvas.rows[row].cells[col].style.backgroundColor = hexToVar(white);
+            }
           }
         }
         scheduleUpdate();
@@ -307,10 +355,11 @@ document.addEventListener("DOMContentLoaded", () => {
         heightInput.value = json.height;
         for (let row = 0; row < 8; row++) {
           for (let col = 0; col < 8; col++) {
-            inputCanvas.rows[row].cells[col].style.backgroundColor = json
-              .pattern[row][col]
-              ? "black"
-              : "white";
+            if (json.pattern[row][col] === 1) {
+              inputCanvas.rows[row].cells[col].style.backgroundColor = hexToVar(black);
+            } else {
+              inputCanvas.rows[row].cells[col].style.backgroundColor = hexToVar(white);
+            }
           }
         }
         scheduleUpdate();
@@ -321,10 +370,19 @@ document.addEventListener("DOMContentLoaded", () => {
   clearButton.addEventListener("click", () => {
     for (let row of inputCanvas.rows) {
       for (let cell of row.cells) {
-        cell.style.backgroundColor = "white";
+        cell.style.backgroundColor = white;
       }
     }
     scheduleUpdate();
+  });
+
+  // select all the text in the input when clicked
+  widthInput.addEventListener("click", () => {
+    widthInput.select();
+  });
+
+  heightInput.addEventListener("click", () => {
+    heightInput.select();
   });
 
   // Update on viewport resize
@@ -339,7 +397,4 @@ function setRangeValue(value) {
   document.getElementById("scale-selector").value = value;
   document.getElementById("scale-selector").dispatchEvent(new Event("input"));
 }
-
-
-
 
