@@ -4,6 +4,12 @@ This is a simple tiled background generator built in simple HTML, JS and CSS. In
 
 ![Screenshot | 50%](screenshot.png)
 
+## Features
+- Save and load patterns
+- Download image
+- Change scale
+- Customize colors
+
 ## How to use
 
 Simply draw your desired pattern in the grid and watch it update live on the background of the page.
@@ -15,10 +21,3 @@ If you want the pattern to appear big in the downloaded image you should set a l
 You can also save your awesome patterns by clicking the save button. Then load them back in by clicking the load button.
 
 For a more personalized experience, you can change the colors of the pattern by clicking the color picker and selecting the desired color.
-
-## Features
-- Save and load patterns
-- Download image
-- Change scale
-- Customize colors
-
