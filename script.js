@@ -8,26 +8,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveButton = document.getElementById("save");
   const loadButton = document.getElementById("load");
   const clearButton = document.getElementById("clear");
-  const body = document.querySelector("body");
   const rightArrow = document.getElementById("right-arrow");
   const leftArrow = document.getElementById("left-arrow");
-  const closeButtonEasterEgg = document.getElementById("close");
   const whiteInput = document.getElementById("white-input");
   const blackInput = document.getElementById("black-input");
 
 
   // Easter egg for the close button
-  closeButtonEasterEgg.addEventListener("click", () => {
-    //toggle the display of the background image of the button
-    if (closeButtonEasterEgg.style.backgroundImage.includes("favicon.png")) {
-      closeButtonEasterEgg.style.backgroundImage = "unset";
-    } else {
-      closeButtonEasterEgg.style.backgroundImage = "url(./favicon.png)";
-    }
-    closeButtonEasterEgg.style.backgroundSize = "cover";
-    closeButtonEasterEgg.style.backgroundPosition = "center";
-    closeButtonEasterEgg.style.backgroundRepeat = "no-repeat";
+  const closeButton = document.getElementById("close");
+  const svg = closeButton.querySelector("svg");
+
+  closeButton.addEventListener("click", () => {
+    svg.style.opacity === "0" ? svg.style.opacity = "1" : svg.style.opacity = "0";
   });
+  
 
   const wallpaperCanvas = document.createElement("canvas");
 
